@@ -2,7 +2,7 @@
 // @name        Frellwit's Lemmy Style
 // @namespace   https://github.com/lassekongo83/UserScripts/lemmy
 // @description A userstyle for Lemmy inspired by the old reddit design
-// @version     0.1
+// @version     0.2
 // @author      Frellwit on lemmy.world
 // @updateURL   https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
 // @downloadURL https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
@@ -21,19 +21,13 @@
   if (isLemmy) {
     const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    if (prefersDarkTheme) {
-      var bodyFontColor = "#fff";
-      var bodyBGcolor = "#222";
-      var secondaryBGcolor = "#555";
-      var cardShadow = "0 0 0 1px rgba(255,255,255,0.14)"
-      var thumbLinkBG = "rgba(255,255,255,0.18)"
-    } else { // Light theme
-      var bodyFontColor = "#222";
-      var bodyBGcolor = "#eee";
-      var secondaryBGcolor = "#fff";
-      var cardShadow = "0 1px 4px 0 rgba(0,0,0,0.14)"
-      var thumbLinkBG = "#d2dbe0"
-    }
+    // dark/light
+    var bodyFontColor    = (prefersDarkTheme) ? "#fff" : "#222";
+    var bodyBGcolor      = (prefersDarkTheme) ? "#222" : "#eee";
+    var secondaryBGcolor = (prefersDarkTheme) ? "#555" : "#fff";
+    var cardShadow       = (prefersDarkTheme) ? "0 0 0 1px rgba(255,255,255,0.14)" : "0 1px 4px 0 rgba(0,0,0,0.14)";
+    var thumbLinkBG      = (prefersDarkTheme) ? "rgba(255,255,255,0.18)" : "#d2dbe0";
+    var thumbLinkBGhover = (prefersDarkTheme) ? "rgba(255,255,255,0.22)" : "#c6d2d8";
 
     const css = `
       /***********/
@@ -148,13 +142,26 @@
         max-width: 50px !important;
         max-height: 50px !important;
       }
+      a[href^="/post/"] .thumbnail:hover,
+      a.text-body[rel="noopener nofollow"] .thumbnail:hover {
+        background-color: `+thumbLinkBGhover+` !important;
+      }
       a.thumbnail[rel="noopener nofollow"]:not([href^="/"]) img.rounded {
         border-radius: 100% !important;
       }
       /********/
       /* MISC */
       /********/
-      img.slight-radius {
+      .md-div blockquote {
+        background-color: color-mix(in srgb, currentColor 6%, transparent);
+        border-radius: 0 4px 4px 0 !important;
+        padding: 8px !important;
+      }
+      .small a:hover,
+      a.text-muted.btn:hover {
+        text-decoration: underline !important;
+      }
+      img.slight-radius:not(.rounded-circle):not(.banner) {
         border-radius: 0 !important;
       }
       .banner-icon-header {
