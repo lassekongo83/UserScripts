@@ -4,36 +4,38 @@
 // @description A userstyle for Lemmy inspired by the old reddit design
 // @version     0.1
 // @author      Frellwit on lemmy.world
+// @updateURL   https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
+// @downloadURL https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
 // @match       https://*/*
 // ==/UserScript==
 (function() {
-	'use strict';
+  'use strict';
 
-	var isLemmy;
-	try {
-		isLemmy = document.head.querySelector("[name~=Description][content]").content === "Lemmy";
-	} catch (_er) {
-		isLemmy = false;
-	}
+  var isLemmy;
+  try {
+    isLemmy = document.head.querySelector("[name~=Description][content]").content === "Lemmy";
+  } catch (_er) {
+    isLemmy = false;
+  }
 
-	if (isLemmy) {
+  if (isLemmy) {
     const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     if (prefersDarkTheme) {
-		  var bodyFontColor = "#fff";
-		  var bodyBGcolor = "#222";
+      var bodyFontColor = "#fff";
+      var bodyBGcolor = "#222";
       var secondaryBGcolor = "#555";
       var cardShadow = "0 0 0 1px rgba(255,255,255,0.14)"
       var thumbLinkBG = "rgba(255,255,255,0.18)"
     } else { // Light theme
-		  var bodyFontColor = "#222";
-		  var bodyBGcolor = "#eee";
+      var bodyFontColor = "#222";
+      var bodyBGcolor = "#eee";
       var secondaryBGcolor = "#fff";
       var cardShadow = "0 1px 4px 0 rgba(0,0,0,0.14)"
       var thumbLinkBG = "#d2dbe0"
     }
 
-		const css = `
+    const css = `
       /***********/
       /* GLOBALS */
       /***********/
