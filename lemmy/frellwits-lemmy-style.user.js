@@ -2,7 +2,7 @@
 // @name        Frellwit's Lemmy Style
 // @namespace   https://github.com/lassekongo83/UserScripts/lemmy
 // @description A userstyle for Lemmy inspired by the old reddit design
-// @version     0.2
+// @version     0.3
 // @author      Frellwit on lemmy.world
 // @updateURL   https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
 // @downloadURL https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
@@ -19,36 +19,48 @@
   }
 
   if (isLemmy) {
+    // Would want a better way to detect if litely or darkly is used
+    // but for now I assume that the user isn't using a light system with a dark website
     const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     // dark/light
     var bodyFontColor    = (prefersDarkTheme) ? "#fff" : "#222";
-    var bodyBGcolor      = (prefersDarkTheme) ? "#222" : "#eee";
-    var secondaryBGcolor = (prefersDarkTheme) ? "#555" : "#fff";
-    var cardShadow       = (prefersDarkTheme) ? "0 0 0 1px rgba(255,255,255,0.14)" : "0 1px 4px 0 rgba(0,0,0,0.14)";
+    var bodyBGcolor      = (prefersDarkTheme) ? "#121317" : "#eee";
+    var secondaryBGcolor = (prefersDarkTheme) ? "#1c1d21" : "#fff";
+    var cardShadow       = (prefersDarkTheme) ? "inset 0 0 0 1px rgba(255,255,255,0.14)" : "0 1px 4px 0 rgba(0,0,0,0.14)";
     var thumbLinkBG      = (prefersDarkTheme) ? "rgba(255,255,255,0.18)" : "#d2dbe0";
     var thumbLinkBGhover = (prefersDarkTheme) ? "rgba(255,255,255,0.22)" : "#c6d2d8";
+    var formTextareaBG   = (prefersDarkTheme) ? "#303135" : "#fff";
+    var cardCapBG        = (prefersDarkTheme) ? "#26272b" : "#f9f9f9";
+    // Brand colors
+    var brandYouTube     = "#FF0000";
+    var brandFacebook    = "#4267B2";
+    var brandTwitter     = "#1DA1F2";
+    var brandStreamable  = "#1090fa";
+    var brandTwitch      = "#6441a5";
 
     const css = `
       /***********/
       /* GLOBALS */
       /***********/
       :root {
-        --bs-body-color: `+bodyFontColor+` !important;
+        --bs-body-bg: ${bodyBGcolor} !important;
+        --bs-body-color: ${bodyFontColor} !important;
         --bs-font-sans-serif: verdana,arial,helvetica,sans-serif !important;
         --bs-body-font-size: 1rem !important;
       }
       /**********/
       /* COLORS */
       /**********/
-      body {
-        background-color: `+bodyBGcolor+` !important;
-      }
       #navbar, .post-listings, #postContent, div > ul.comments > .comment {
-        background-color: `+secondaryBGcolor+` !important;
+        background-color: ${secondaryBGcolor} !important;
       }
       .card {
-        --bs-card-bg: `+secondaryBGcolor+` !important;
+        --bs-card-bg: ${secondaryBGcolor} !important;
+        --bs-card-cap-bg: ${cardCapBG} !important;
+      }
+      textarea.form-control, input.form-control[type="text"] {
+        background-color: ${formTextareaBG} !important;
       }
       /*********/
       /* SIZES */
@@ -90,12 +102,12 @@
       /* POST LISTINGS & COMMENTS */
       /****************************/
       .post-listings {
-        box-shadow: `+cardShadow+` !important;
+        box-shadow: ${cardShadow} !important;
         padding: .85rem !important;
         border-radius: var(--bs-border-radius) !important;
       }
       div > ul.comments > .comment {
-        box-shadow: `+cardShadow+` !important;
+        box-shadow: ${cardShadow} !important;
         padding: 0 .85rem !important;
         margin-bottom: 8px !important;
         padding-bottom: .85rem !important;
@@ -133,7 +145,7 @@
       }
       a[href^="/post/"] .thumbnail,
       a.text-body[rel="noopener nofollow"] .thumbnail {
-        background-color: `+thumbLinkBG+` !important;
+        background-color: ${thumbLinkBG} !important;
         color: white !important;
         border-radius: 100% !important;
         border: none !important;
@@ -144,17 +156,35 @@
       }
       a[href^="/post/"] .thumbnail:hover,
       a.text-body[rel="noopener nofollow"] .thumbnail:hover {
-        background-color: `+thumbLinkBGhover+` !important;
+        background-color: ${thumbLinkBGhover} !important;
       }
       a.thumbnail[rel="noopener nofollow"]:not([href^="/"]) img.rounded {
         border-radius: 100% !important;
       }
+      .post-listings .post-metadata-card, .post-listings article#postContent {
+        border: 1px solid color-mix(in srgb, currentColor 6%, transparent) !important;
+        background-color: color-mix(in srgb, currentColor 4%, transparent) !important;
+        box-shadow: none !important;
+      }
       /********/
       /* MISC */
       /********/
+      .md-div blockquote:before {
+        font-family: Georgia, serif !important;
+        content: "“" !important;
+        color: color-mix(in srgb, currentColor 12%, transparent) !important;
+        font-size: 4em !important;
+        line-height: 0.1em !important;
+        margin-right: 0.1em !important;
+        vertical-align: -0.4em !important;
+      }
+      .md-div blockquote p {
+        display: inline !important;
+      }
       .md-div blockquote {
-        background-color: color-mix(in srgb, currentColor 6%, transparent);
-        border-radius: 0 4px 4px 0 !important;
+        background-color: color-mix(in srgb, currentColor 4%, transparent) !important;
+        border: 1px solid color-mix(in srgb, currentColor 6%, transparent) !important;
+        border-radius: 4px !important;
         padding: 8px !important;
       }
       .small a:hover,
@@ -168,7 +198,7 @@
         max-width: unset !important;
       }
       .card {
-        box-shadow: `+cardShadow+` !important;
+        box-shadow: ${cardShadow} !important;
         border: none !important;
       }
       .card.border-secondary {
@@ -180,25 +210,32 @@
         color: rgba(255,0,0,0.5) !important;
       }
       a[rel="noopener nofollow"][href*="youtube.com"] .thumbnail,
-      a[rel="noopener nofollow"][href*="youtu.be"] .thumbnail {
-        background-color: #ff6767 !important;
+      a[rel="noopener nofollow"][href*="youtu.be"] .thumbnail,
+      a[rel="noopener nofollow"][href*="youtube.com"] .thumbnail:hover,
+      a[rel="noopener nofollow"][href*="youtu.be"] .thumbnail:hover {
+        background-color: ${brandYouTube} !important;
         color: white !important;
       }
-      a[rel="noopener nofollow"][href*="facebook.com"] .thumbnail {
-        background-color: #4267B2 !important;
+      a[rel="noopener nofollow"][href*="facebook.com"] .thumbnail,
+      a[rel="noopener nofollow"][href*="facebook.com"] .thumbnail:hover {
+        background-color: ${brandFacebook} !important;
         color: white !important;
       }
       a[rel="noopener nofollow"][href*="/t.co"] .thumbnail,
-      a[rel="noopener nofollow"][href*="/twitter.com"] .thumbnail {
-        background-color: #1DA1F2 !important;
+      a[rel="noopener nofollow"][href*="/twitter.com"] .thumbnail,
+      a[rel="noopener nofollow"][href*="/t.co"] .thumbnail:hover,
+      a[rel="noopener nofollow"][href*="/twitter.com"] .thumbnail:hover {
+        background-color: ${brandTwitter} !important;
         color: white !important;
       }
-      a[rel="noopener nofollow"][href*="streamable.com"] .thumbnail {
-        background-color: #1090fa !important;
+      a[rel="noopener nofollow"][href*="streamable.com"] .thumbnail,
+      a[rel="noopener nofollow"][href*="streamable.com"] .thumbnail:hover {
+        background-color: ${brandStreamable} !important;
         color: white !important;
       }
-      a[rel="noopener nofollow"][href*="twitch.tv"] .thumbnail {
-        background-color: #6441a5 !important;
+      a[rel="noopener nofollow"][href*="twitch.tv"] .thumbnail,
+      a[rel="noopener nofollow"][href*="twitch.tv"] .thumbnail:hover {
+        background-color: ${brandTwitch} !important;
         color: white !important;
       }
     `
