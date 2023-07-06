@@ -2,7 +2,7 @@
 // @name        Frellwit's Lemmy Style
 // @namespace   https://github.com/lassekongo83/UserScripts/lemmy
 // @description A userstyle for Lemmy inspired by the old reddit design
-// @version     0.3
+// @version     0.4
 // @author      Frellwit on lemmy.world
 // @updateURL   https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
 // @downloadURL https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
@@ -24,43 +24,59 @@
     const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     // dark/light
-    var bodyFontColor    = (prefersDarkTheme) ? "#fff" : "#222";
-    var bodyBGcolor      = (prefersDarkTheme) ? "#121317" : "#eee";
-    var secondaryBGcolor = (prefersDarkTheme) ? "#1c1d21" : "#fff";
-    var cardShadow       = (prefersDarkTheme) ? "inset 0 0 0 1px rgba(255,255,255,0.14)" : "0 1px 4px 0 rgba(0,0,0,0.14)";
-    var thumbLinkBG      = (prefersDarkTheme) ? "rgba(255,255,255,0.18)" : "#d2dbe0";
-    var thumbLinkBGhover = (prefersDarkTheme) ? "rgba(255,255,255,0.22)" : "#c6d2d8";
-    var formTextareaBG   = (prefersDarkTheme) ? "#303135" : "#fff";
-    var cardCapBG        = (prefersDarkTheme) ? "#26272b" : "#f9f9f9";
+    var primaryBackground    = (prefersDarkTheme) ? "#121317" : "#f0f0f0";
+    var secondaryBackground  = (prefersDarkTheme) ? "#1c1d21" : "#fff";
+    var primaryText          = (prefersDarkTheme) ? "#fff" : "#222";
+    var primaryTextRGB       = (prefersDarkTheme) ? "255, 255, 255" : "13, 13, 13";
+    var cardCapBackground    = (prefersDarkTheme) ? "#26272b" : "#fcfcfc";
+    var cardText             = (prefersDarkTheme) ? "#fff" : "#222";
+    var cardShadow           = (prefersDarkTheme) ? "inset 0 0 0 1px rgba(255,255,255,0.14)" : "0 1px 2px rgba(0,0,0,.1)";
+    var thumbBackground      = (prefersDarkTheme) ? "rgba(255,255,255,0.18)" : "#d2dbe0";
+    var thumbBackgroundHover = (prefersDarkTheme) ? "rgba(255,255,255,0.22)" : "#c6d2d8";
+    var formBackground       = (prefersDarkTheme) ? "#26272b" : "#fff";
+    var buttonBackground     = (prefersDarkTheme) ? "#303135" : "#fff";
+    var buttonBorder         = (prefersDarkTheme) ? "rgba(255,255,255,0.22)" : "#c6d2d8";
     // Brand colors
-    var brandYouTube     = "#FF0000";
-    var brandFacebook    = "#4267B2";
-    var brandTwitter     = "#1DA1F2";
-    var brandStreamable  = "#1090fa";
-    var brandTwitch      = "#6441a5";
+    var brandYouTube         = "#FF0000";
+    var brandFacebook        = "#4267B2";
+    var brandTwitter         = "#1DA1F2";
+    var brandStreamable      = "#1090fa";
+    var brandTwitch          = "#6441a5";
+    // Misc values
+    var defaultSpacing       = ".85rem";  // Spacing between most elements
+    var defaultFontsize      = "1rem";    // Default body font size
+    var mdFontsize           = ".9rem";   // md-div aka comments and posts
+    var mdLineheight         = "1.56";
+    var mdMaxwidth           = "60em";
+    var titleFontsize        = "medium";
+    var subtitleFontsize     = "x-small"; // text below the post title
+    var buttonRadius         = "4px";
 
     const css = `
       /***********/
       /* GLOBALS */
       /***********/
       :root {
-        --bs-body-bg: ${bodyBGcolor} !important;
-        --bs-body-color: ${bodyFontColor} !important;
+        --bs-body-bg: ${primaryBackground} !important;
+        --bs-body-color: ${primaryText} !important;
+        --bs-body-color-rgb: ${primaryTextRGB} !important;
         --bs-font-sans-serif: verdana,arial,helvetica,sans-serif !important;
-        --bs-body-font-size: 1rem !important;
+        --bs-body-font-size: ${defaultFontsize} !important;
       }
       /**********/
       /* COLORS */
       /**********/
       #navbar, .post-listings, #postContent, div > ul.comments > .comment {
-        background-color: ${secondaryBGcolor} !important;
+        background-color: ${secondaryBackground} !important;
       }
       .card {
-        --bs-card-bg: ${secondaryBGcolor} !important;
-        --bs-card-cap-bg: ${cardCapBG} !important;
+        --bs-card-bg: ${secondaryBackground} !important;
+        --bs-card-cap-bg: ${cardCapBackground} !important;
+        --bs-card-color: ${cardText} !important;
+        color: ${cardText} !important;
       }
       textarea.form-control, input.form-control[type="text"] {
-        background-color: ${formTextareaBG} !important;
+        background-color: ${formBackground} !important;
       }
       /*********/
       /* SIZES */
@@ -81,47 +97,49 @@
         min-width: 50px !important;
       }
       .md-div, .comment-form {
-        max-width: 60em !important;
+        max-width: ${mdMaxwidth} !important;
       }
       /****************************/
       /* FONT SIZES & TEXT COLORS */
       /****************************/
-      .post-title h5 {
-        font-size: medium !important;
+      .post-title .h5 {
+        font-size: ${titleFontsize} !important;
       }
       a > span.fst-italic {
         color: var(--bs-orange) !important;
       }
       .comment .md-div, .card .md-div {
-        font-size: .85rem !important;
+        font-size: ${mdFontsize} !important;
+        line-height: ${mdLineheight} !important;
       }
       .post-listings .post-title ~ .small {
-        font-size: x-small !important;
+        font-size: ${subtitleFontsize} !important;
       }
       /****************************/
       /* POST LISTINGS & COMMENTS */
       /****************************/
       .post-listings {
         box-shadow: ${cardShadow} !important;
-        padding: .85rem !important;
-        border-radius: var(--bs-border-radius) !important;
+        padding: ${defaultSpacing} !important;
       }
       div > ul.comments > .comment {
         box-shadow: ${cardShadow} !important;
-        padding: 0 .85rem !important;
+        padding: 0 ${defaultSpacing} !important;
         margin-bottom: 8px !important;
-        padding-bottom: .85rem !important;
-        border-radius: var(--bs-border-radius) !important;
       }
       div > ul.comments > .comment > .comments .comment {
-        margin-left: .85rem !important;
+        margin-left: ${defaultSpacing} !important;
       }
       div > ul.comments > li.comment > article.border-top, div > ul.comments.border-top {
         border-top: none !important;
       }
+      .post-listings hr {
+        margin-top: ${defaultSpacing} !important;
+        margin-bottom: ${defaultSpacing} !important;
+      }
       .post-listing + hr.my-3 {
-        margin-right: -.85rem !important;
-        margin-left: -.85rem !important;
+        margin-right: -${defaultSpacing} !important;
+        margin-left: -${defaultSpacing} !important;
       }
       .post-listing + hr:only-child, .post-listing + hr:last-child {
         display: none !important;
@@ -145,7 +163,7 @@
       }
       a[href^="/post/"] .thumbnail,
       a.text-body[rel="noopener nofollow"] .thumbnail {
-        background-color: ${thumbLinkBG} !important;
+        background-color: ${thumbBackground} !important;
         color: white !important;
         border-radius: 100% !important;
         border: none !important;
@@ -156,7 +174,7 @@
       }
       a[href^="/post/"] .thumbnail:hover,
       a.text-body[rel="noopener nofollow"] .thumbnail:hover {
-        background-color: ${thumbLinkBGhover} !important;
+        background-color: ${thumbBackgroundHover} !important;
       }
       a.thumbnail[rel="noopener nofollow"]:not([href^="/"]) img.rounded {
         border-radius: 100% !important;
@@ -200,6 +218,7 @@
       .card {
         box-shadow: ${cardShadow} !important;
         border: none !important;
+        border-radius: 0 !important;
       }
       .card.border-secondary {
         border: none !important;
@@ -237,6 +256,24 @@
       a[rel="noopener nofollow"][href*="twitch.tv"] .thumbnail:hover {
         background-color: ${brandTwitch} !important;
         color: white !important;
+      }
+      /***********/
+      /* BUTTONS */
+      /***********/
+      .btn {
+        --bs-btn-border-radius: ${buttonRadius} !important;
+      }
+      .btn.btn-outline-secondary:not(.active) {
+        border: 1px solid ${buttonBorder} !important;
+        background-color: ${buttonBackground} !important;
+        box-shadow: rgba(0,0,0,0.05) 0px 1px 0px 0px !important;
+        color: ${primaryText} !important;
+      }
+      .btn.btn-outline-secondary:not(.active):hover {
+        background-color: color-mix(in srgb, currentColor 5%, #fff) !important;
+      }
+      .btn.btn-outline-secondary.active {
+        box-shadow: rgba(0,0,0,0.05) 0px 1px 0px 0px,rgba(0,0,0,0.2) 0px -1px 0px 0px inset !important;
       }
     `
     const styleTag = document.createElement('style');
