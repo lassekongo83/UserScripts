@@ -19,38 +19,40 @@
   }
 
   if (isLemmy) {
-    // Would want a better way to detect if litely or darkly is used
-    // but for now I assume that the user isn't using a light system with a dark website
-    const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const element = document.getElementById("app");
+    const themeVariant = element.getAttribute("data-bs-theme");
 
-    // dark/light
-    var primaryBackground    = (prefersDarkTheme) ? "#121317" : "#f0f0f0";
-    var secondaryBackground  = (prefersDarkTheme) ? "#1c1d21" : "#fff";
-    var primaryText          = (prefersDarkTheme) ? "#fff" : "#222";
-    var primaryTextRGB       = (prefersDarkTheme) ? "255, 255, 255" : "13, 13, 13";
-    var cardCapBackground    = (prefersDarkTheme) ? "#26272b" : "#fcfcfc";
-    var cardText             = (prefersDarkTheme) ? "#fff" : "#222";
-    var cardShadow           = (prefersDarkTheme) ? "inset 0 0 0 1px rgba(255,255,255,0.14)" : "0 1px 2px rgba(0,0,0,.1)";
-    var thumbBackground      = (prefersDarkTheme) ? "rgba(255,255,255,0.18)" : "#d2dbe0";
-    var thumbBackgroundHover = (prefersDarkTheme) ? "rgba(255,255,255,0.22)" : "#c6d2d8";
-    var formBackground       = (prefersDarkTheme) ? "#26272b" : "#fff";
-    var buttonBackground     = (prefersDarkTheme) ? "#303135" : "#fff";
-    var buttonBorder         = (prefersDarkTheme) ? "rgba(255,255,255,0.22)" : "#c6d2d8";
+    // light : dark
+    const primaryBackground    = themeVariant === "light" ? "#f0f0f0" : "#121317";
+    const secondaryBackground  = themeVariant === "light" ? "#ffffff" : "#1c1d21";
+    const primaryText          = themeVariant === "light" ? "#222222" : "#ffffff";
+    const primaryTextRGB       = themeVariant === "light" ? "13, 13, 13" : "255, 255, 255";
+    const cardCapBackground    = themeVariant === "light" ? "#fcfcfc" : "#26272b";
+    const cardText             = themeVariant === "light" ? "#222222" : "#ffffff";
+    const cardShadow           = themeVariant === "light" ? "0 1px 2px rgba(0,0,0,.1)" : "inset 0 0 0 1px rgba(255,255,255,0.14)";
+    const thumbBackground      = themeVariant === "light" ? "#d2dbe0" : "rgba(255,255,255,0.18)";
+    const thumbBackgroundHover = themeVariant === "light" ? "#c6d2d8" : "rgba(255,255,255,0.22)";
+    const formBackground       = themeVariant === "light" ? "#ffffff" : "#26272b";
+    const buttonBackground     = themeVariant === "light" ? "#ffffff" : "#303135";
+    const buttonHover          = themeVariant === "light" ? "#f5f5f5" : "#43444a";
+    const buttonBorder         = themeVariant === "light" ? "#c6d2d8" : "rgba(255,255,255,0.22)";
+
     // Brand colors
-    var brandYouTube         = "#FF0000";
-    var brandFacebook        = "#4267B2";
-    var brandTwitter         = "#1DA1F2";
-    var brandStreamable      = "#1090fa";
-    var brandTwitch          = "#6441a5";
+    var brandYouTube     = "#FF0000";
+    var brandFacebook    = "#4267B2";
+    var brandTwitter     = "#1DA1F2";
+    var brandStreamable  = "#1090fa";
+    var brandTwitch      = "#6441a5";
     // Misc values
-    var defaultSpacing       = ".85rem";  // Spacing between most elements
-    var defaultFontsize      = "1rem";    // Default body font size
-    var mdFontsize           = ".9rem";   // md-div aka comments and posts
-    var mdLineheight         = "1.56";
-    var mdMaxwidth           = "60em";
-    var titleFontsize        = "medium";
-    var subtitleFontsize     = "x-small"; // text below the post title
-    var buttonRadius         = "4px";
+    var defaultSpacing   = ".85rem";  // Spacing between most elements
+    var defaultFontsize  = "1rem";    // Default body font size
+    var mdFontsize       = ".9rem";   // md-div aka comments and posts
+    var mdLineheight     = "1.56";
+    var mdMaxwidth       = "60em";
+    var codeFontsize     = ".9rem";
+    var titleFontsize    = "medium";
+    var subtitleFontsize = "x-small"; // text below the post title
+    var buttonRadius     = "4px";
 
     const css = `
       /***********/
@@ -114,6 +116,9 @@
       }
       .post-listings .post-title ~ .small {
         font-size: ${subtitleFontsize} !important;
+      }
+      code {
+        font-size: ${codeFontsize} !important;
       }
       /****************************/
       /* POST LISTINGS & COMMENTS */
@@ -226,7 +231,7 @@
       /* Let's make some social media links be their brand accent color */
       a[href*="youtu.be"],
       a[href*="youtube.com"] {
-        color: rgba(255,0,0,0.5) !important;
+        color: ${brandYouTube} !important;
       }
       a[rel="noopener nofollow"][href*="youtube.com"] .thumbnail,
       a[rel="noopener nofollow"][href*="youtu.be"] .thumbnail,
@@ -270,14 +275,28 @@
         color: ${primaryText} !important;
       }
       .btn.btn-outline-secondary:not(.active):hover {
-        background-color: color-mix(in srgb, currentColor 5%, #fff) !important;
+        background-color: ${buttonHover} !important;
       }
       .btn.btn-outline-secondary.active {
         box-shadow: rgba(0,0,0,0.05) 0px 1px 0px 0px,rgba(0,0,0,0.2) 0px -1px 0px 0px inset !important;
       }
     `
+
+    function minifyCSS(css) {
+      // Remove comments
+      css = css.replace(/\/\*[\s\S]*?\*\//g, '');
+      // Remove whitespace and newlines
+      css = css.replace(/\s+/g, ' ');
+      // Remove unnecessary semicolons
+      css = css.replace(/;}/g, '}');
+      // Remove whitespace around selectors, properties, and values
+      css = css.replace(/\s*({|}|:|;)\s*/g, '\$1');
+      return css;
+    }
+
+    const minifiedCSS = minifyCSS(css);
     const styleTag = document.createElement('style');
-    styleTag.appendChild(document.createTextNode(css));
+    styleTag.appendChild(document.createTextNode(minifiedCSS));
     document.head.appendChild(styleTag);
   }
 
