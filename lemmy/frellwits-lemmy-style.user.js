@@ -2,7 +2,7 @@
 // @name        Frellwit's Lemmy Style
 // @namespace   https://github.com/lassekongo83/UserScripts/lemmy
 // @description A userstyle for Lemmy inspired by the old reddit design
-// @version     0.4
+// @version     0.5
 // @author      Frellwit on lemmy.world
 // @updateURL   https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
 // @downloadURL https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
@@ -22,6 +22,8 @@
     const element = document.getElementById("app");
     const themeVariant = element.getAttribute("data-bs-theme");
 
+    const isCompact = document.head.querySelector('link[href*="-compact.css"]') !== null;
+
     // light : dark
     const primaryBackground    = themeVariant === "light" ? "#f0f0f0" : "#121317";
     const secondaryBackground  = themeVariant === "light" ? "#ffffff" : "#1c1d21";
@@ -38,21 +40,36 @@
     const buttonBorder         = themeVariant === "light" ? "#c6d2d8" : "rgba(255,255,255,0.22)";
 
     // Brand colors
-    var brandYouTube     = "#FF0000";
-    var brandFacebook    = "#4267B2";
-    var brandTwitter     = "#1DA1F2";
-    var brandStreamable  = "#1090fa";
-    var brandTwitch      = "#6441a5";
+    // This is to make links to proprietary social media stand out.
+    // You don't want to click on such a link unnecessarily, do you? ;-)
+    const brandYouTube     = "#FF0000";
+    const brandFacebook    = "#4267B2";
+    const brandTwitter     = "#1DA1F2";
+    const brandTwitch      = "#6441a5";
+    const brandReddit      = "#ff4500";
+    const brandImgur       = "#89c623";
+    const brandInstagram   = "radial-gradient(circle farthest-corner at 28% 100%, #fcdf8f 0%, #fbd377 10%, #fa8e37; 22%, #f73344; 35%, transparent 65%), linear-gradient(145deg, #3051f1 10%, #c92bb7 70%)";
+
     // Misc values
-    var defaultSpacing   = ".85rem";  // Spacing between most elements
-    var defaultFontsize  = "1rem";    // Default body font size
-    var mdFontsize       = ".9rem";   // md-div aka comments and posts
-    var mdLineheight     = "1.56";
-    var mdMaxwidth       = "60em";
-    var codeFontsize     = ".9rem";
-    var titleFontsize    = "medium";
-    var subtitleFontsize = "x-small"; // text below the post title
-    var buttonRadius     = "4px";
+    // Is compact - true : false
+    const defaultSpacing   = isCompact ? ".45rem" : ".85rem"; // Spacing between most elements
+    const defaultFontsize  = isCompact ? "1rem" : "1rem";     // Default body font size
+    const mdFontsize       = isCompact ? "0.875rem" : "14px";   // md-div aka comments and posts
+    const mdLineheight     = isCompact ? "1.5" : "1.5";
+    const mdMaxwidth       = isCompact ? "60em" : "60em";
+    const codeFontsize     = isCompact ? ".9rem" : ".9rem";
+    const titleFontsize    = isCompact ? "small" : "medium";
+    const titleFontweight  = isCompact ? "600" : "500";
+    const subtitleFontsize = isCompact ? "x-small" : "x-small";
+    const thumbWidth       = isCompact ? "50px" : "70px";
+    const thumbHeight      = isCompact ? "50px" : "70px";
+    const textThumbWidth   = isCompact ? "40px" : "50px";
+    const textThumbHeight  = isCompact ? "40px" : "50px";
+
+    // Other stuff
+    const buttonRadius     = "4px";
+    const defaultFonts     = "verdana,arial,helvetica,sans-serif"
+
 
     const css = `
       /***********/
@@ -62,7 +79,7 @@
         --bs-body-bg: ${primaryBackground} !important;
         --bs-body-color: ${primaryText} !important;
         --bs-body-color-rgb: ${primaryTextRGB} !important;
-        --bs-font-sans-serif: verdana,arial,helvetica,sans-serif !important;
+        --bs-font-sans-serif: ${defaultFonts} !important;
         --bs-body-font-size: ${defaultFontsize} !important;
       }
       /**********/
@@ -106,6 +123,7 @@
       /****************************/
       .post-title .h5 {
         font-size: ${titleFontsize} !important;
+        font-weight: ${titleFontweight} !important;
       }
       a > span.fst-italic {
         color: var(--bs-orange) !important;
@@ -114,11 +132,14 @@
         font-size: ${mdFontsize} !important;
         line-height: ${mdLineheight} !important;
       }
-      .post-listings .post-title ~ .small {
+      .post-listings .post-title ~ .small, span.badge {
         font-size: ${subtitleFontsize} !important;
       }
       code {
         font-size: ${codeFontsize} !important;
+      }
+      .btn:not(.btn-link), .btn-secondary, .form-select, textarea.form-control {
+        font-size: ${mdFontsize} !important;
       }
       /****************************/
       /* POST LISTINGS & COMMENTS */
@@ -149,22 +170,28 @@
       .post-listing + hr:only-child, .post-listing + hr:last-child {
         display: none !important;
       }
+      article.row.post-container > .col {
+        display: flex !important;
+        align-items: center !important;
+      }
       /* Thumbnails */
       button.thumbnail.rounded,
       button.thumbnail.rounded img.rounded {
         border-radius: 0 !important;
       }
       .post-listing button.thumbnail.p-0,
-      .post-listing .px-0 {
-        max-width: 70px !important;
-        max-height: 70px !important;
-        min-width: 70px !important;
-        min-height: 70px !important;
+      .post-listing .px-0,
+      a.thumbnail[rel="noopener nofollow"] {
+        max-width: ${thumbWidth} !important;
+        max-height: ${thumbHeight} !important;
+        min-width: ${thumbWidth} !important;
+        min-height: ${thumbHeight} !important;
       }
       .post-listing .px-0 {
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
+        margin: auto !important;
       }
       a[href^="/post/"] .thumbnail,
       a.text-body[rel="noopener nofollow"] .thumbnail {
@@ -172,10 +199,10 @@
         color: white !important;
         border-radius: 100% !important;
         border: none !important;
-        min-width: 50px !important;
-        min-height: 50px !important;
-        max-width: 50px !important;
-        max-height: 50px !important;
+        min-width: ${textThumbWidth} !important;
+        min-height: ${textThumbHeight} !important;
+        max-width: ${textThumbWidth} !important;
+        max-height: ${textThumbHeight} !important;
       }
       a[href^="/post/"] .thumbnail:hover,
       a.text-body[rel="noopener nofollow"] .thumbnail:hover {
@@ -192,6 +219,10 @@
       /********/
       /* MISC */
       /********/
+      .search.container-lg {
+        margin-left: ${defaultSpacing} !important;
+        margin-right: ${defaultSpacing} !important;
+      }
       .md-div blockquote:before {
         font-family: Georgia, serif !important;
         content: "“" !important;
@@ -252,14 +283,26 @@
         background-color: ${brandTwitter} !important;
         color: white !important;
       }
-      a[rel="noopener nofollow"][href*="streamable.com"] .thumbnail,
-      a[rel="noopener nofollow"][href*="streamable.com"] .thumbnail:hover {
-        background-color: ${brandStreamable} !important;
-        color: white !important;
-      }
       a[rel="noopener nofollow"][href*="twitch.tv"] .thumbnail,
       a[rel="noopener nofollow"][href*="twitch.tv"] .thumbnail:hover {
         background-color: ${brandTwitch} !important;
+        color: white !important;
+      }
+      a[rel="noopener nofollow"][href*="instagram.com"] .thumbnail,
+      a[rel="noopener nofollow"][href*="instagram.com"] .thumbnail:hover {
+        background: ${brandInstagram} !important;
+        color: white !important;
+      }
+      a[rel="noopener nofollow"][href*="imgur.com"] .thumbnail,
+      a[rel="noopener nofollow"][href*="imgur.com"] .thumbnail:hover {
+        background-color: ${brandImgur} !important;
+        color: white !important;
+      }
+      a[rel="noopener nofollow"][href*="redd.it"] .thumbnail,
+      a[rel="noopener nofollow"][href*="reddit.com"] .thumbnail,
+      a[rel="noopener nofollow"][href*="redd.it"] .thumbnail:hover,
+      a[rel="noopener nofollow"][href*="reddit.com"] .thumbnail:hover {
+        background-color: ${brandReddit} !important;
         color: white !important;
       }
       /***********/
