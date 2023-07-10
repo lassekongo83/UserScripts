@@ -19,25 +19,25 @@
   }
 
   if (isLemmy) {
-    const element = document.getElementById("app");
-    const themeVariant = element.getAttribute("data-bs-theme");
-
+    const themeVariant = document.getElementById("app").getAttribute("data-bs-theme");
+    const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isCompact = document.head.querySelector('link[href*="-compact.css"]') !== null;
 
     // light : dark
-    const primaryBackground    = themeVariant === "light" ? "#f0f0f0" : "#121317";
-    const secondaryBackground  = themeVariant === "light" ? "#ffffff" : "#1c1d21";
-    const primaryText          = themeVariant === "light" ? "#222222" : "#ffffff";
-    const primaryTextRGB       = themeVariant === "light" ? "13, 13, 13" : "255, 255, 255";
-    const cardCapBackground    = themeVariant === "light" ? "#fcfcfc" : "#26272b";
-    const cardText             = themeVariant === "light" ? "#222222" : "#ffffff";
-    const cardShadow           = themeVariant === "light" ? "0 1px 2px rgba(0,0,0,.1)" : "inset 0 0 0 1px rgba(255,255,255,0.14)";
-    const thumbBackground      = themeVariant === "light" ? "#d2dbe0" : "rgba(255,255,255,0.18)";
-    const thumbBackgroundHover = themeVariant === "light" ? "#c6d2d8" : "rgba(255,255,255,0.22)";
-    const formBackground       = themeVariant === "light" ? "#ffffff" : "#26272b";
-    const buttonBackground     = themeVariant === "light" ? "#ffffff" : "#303135";
-    const buttonHover          = themeVariant === "light" ? "#f5f5f5" : "#43444a";
-    const buttonBorder         = themeVariant === "light" ? "#c6d2d8" : "rgba(255,255,255,0.22)";
+    // themeVariant can be light even when the user prefer dark themes
+    const primaryBackground    = (!prefersDarkTheme && themeVariant === "light") ? "#f0f0f0" : "#121317";
+    const secondaryBackground  = (!prefersDarkTheme && themeVariant === "light") ? "#ffffff" : "#1c1d21";
+    const primaryText          = (!prefersDarkTheme && themeVariant === "light") ? "#222222" : "#ffffff";
+    const primaryTextRGB       = (!prefersDarkTheme && themeVariant === "light") ? "13, 13, 13" : "255, 255, 255";
+    const cardCapBackground    = (!prefersDarkTheme && themeVariant === "light") ? "#fcfcfc" : "#26272b";
+    const cardText             = (!prefersDarkTheme && themeVariant === "light") ? "#222222" : "#ffffff";
+    const cardShadow           = (!prefersDarkTheme && themeVariant === "light") ? "0 1px 2px rgba(0,0,0,.1)" : "inset 0 0 0 1px rgba(255,255,255,0.1)";
+    const thumbBackground      = (!prefersDarkTheme && themeVariant === "light") ? "#d2dbe0" : "rgba(255,255,255,0.18)";
+    const thumbBackgroundHover = (!prefersDarkTheme && themeVariant === "light") ? "#c6d2d8" : "rgba(255,255,255,0.22)";
+    const formBackground       = (!prefersDarkTheme && themeVariant === "light") ? "#ffffff" : "#26272b";
+    const buttonBackground     = (!prefersDarkTheme && themeVariant === "light") ? "#ffffff" : "#303135";
+    const buttonHover          = (!prefersDarkTheme && themeVariant === "light") ? "#f5f5f5" : "#43444a";
+    const buttonBorder         = (!prefersDarkTheme && themeVariant === "light") ? "#c6d2d8" : "rgba(255,255,255,0.22)";
 
     // Brand colors
     // This is to make links to proprietary social media stand out.
@@ -51,25 +51,24 @@
     const brandInstagram   = "radial-gradient(circle farthest-corner at 28% 100%, #fcdf8f 0%, #fbd377 10%, #fa8e37; 22%, #f73344; 35%, transparent 65%), linear-gradient(145deg, #3051f1 10%, #c92bb7 70%)";
 
     // Misc values
-    // Is compact - true : false
-    const defaultSpacing   = isCompact ? ".45rem" : ".85rem"; // Spacing between most elements
-    const defaultFontsize  = isCompact ? "1rem" : "1rem";     // Default body font size
-    const mdFontsize       = isCompact ? "0.875rem" : "14px";   // md-div aka comments and posts
-    const mdLineheight     = isCompact ? "1.5" : "1.5";
-    const mdMaxwidth       = isCompact ? "60em" : "60em";
-    const codeFontsize     = isCompact ? ".9rem" : ".9rem";
-    const titleFontsize    = isCompact ? "small" : "medium";
-    const titleFontweight  = isCompact ? "600" : "500";
-    const subtitleFontsize = isCompact ? "x-small" : "x-small";
-    const thumbWidth       = isCompact ? "50px" : "70px";
-    const thumbHeight      = isCompact ? "50px" : "70px";
-    const textThumbWidth   = isCompact ? "40px" : "50px";
-    const textThumbHeight  = isCompact ? "40px" : "50px";
+    // Is compact - false : true
+    const defaultSpacing   = !isCompact ? ".85rem" : ".45rem"; // Spacing between most elements
+    const defaultFontsize  = !isCompact ? "1rem" : "1rem";     // Default body font size
+    const mdFontsize       = !isCompact ? "14px" : "0.875rem"; // md-div aka comments and posts
+    const mdLineheight     = !isCompact ? "1.5" : "1.5";
+    const mdMaxwidth       = !isCompact ? "60em" : "60em";
+    const codeFontsize     = !isCompact ? "14px" : "0.875rem";
+    const titleFontsize    = !isCompact ? "medium" : "small";
+    const titleFontweight  = !isCompact ? "500" : "500";
+    const subtitleFontsize = !isCompact ? "x-small" : "x-small";
+    const thumbWidth       = !isCompact ? "70px" : "50px";
+    const thumbHeight      = !isCompact ? "70px" : "50px";
+    const textThumbWidth   = !isCompact ? "50px" : "40px";
+    const textThumbHeight  = !isCompact ? "50px" : "40px";
 
     // Other stuff
     const buttonRadius     = "4px";
     const defaultFonts     = "verdana,arial,helvetica,sans-serif"
-
 
     const css = `
       /***********/
@@ -138,7 +137,7 @@
       code {
         font-size: ${codeFontsize} !important;
       }
-      .btn:not(.btn-link), .btn-secondary, .form-select, textarea.form-control {
+      .btn:not(.btn-link), .btn-secondary, .form-select, textarea.form-control, .col-md-4 .list-inline-item:not(.badge) {
         font-size: ${mdFontsize} !important;
       }
       /****************************/
@@ -250,6 +249,9 @@
       }
       .banner-icon-header {
         max-width: unset !important;
+      }
+      .card-header:first-child {
+        border-radius: 0 !important;
       }
       .card {
         box-shadow: ${cardShadow} !important;
