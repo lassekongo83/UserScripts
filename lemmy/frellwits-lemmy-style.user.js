@@ -2,7 +2,7 @@
 // @name        Frellwit's Lemmy Style
 // @namespace   https://github.com/lassekongo83/UserScripts/lemmy
 // @description A userstyle for Lemmy inspired by the old reddit design
-// @version     0.5
+// @version     0.6
 // @author      Frellwit on lemmy.world
 // @updateURL   https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
 // @downloadURL https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
@@ -24,7 +24,7 @@
     const isCompact = document.head.querySelector('link[href*="-compact.css"]') !== null;
 
     // light : dark
-    // themeVariant can be light even when the user prefer dark themes
+    // themeVariant can somehow still be light even when the user prefer dark themes
     const primaryBackground    = (!prefersDarkTheme && themeVariant === "light") ? "#f0f0f0" : "#121317";
     const secondaryBackground  = (!prefersDarkTheme && themeVariant === "light") ? "#ffffff" : "#1c1d21";
     const primaryText          = (!prefersDarkTheme && themeVariant === "light") ? "#222222" : "#ffffff";
@@ -38,6 +38,10 @@
     const buttonBackground     = (!prefersDarkTheme && themeVariant === "light") ? "#ffffff" : "#303135";
     const buttonHover          = (!prefersDarkTheme && themeVariant === "light") ? "#f5f5f5" : "#43444a";
     const buttonBorder         = (!prefersDarkTheme && themeVariant === "light") ? "#c6d2d8" : "rgba(255,255,255,0.22)";
+    const codeBackground       = (!prefersDarkTheme && themeVariant === "light") ? "#fcfcfc" : "#303135";
+    const codeBorder           = (!prefersDarkTheme && themeVariant === "light") ? "#e6e6e6" : "rgba(255,255,255,0.1)";
+    const quoteBackground      = (!prefersDarkTheme && themeVariant === "light") ? "#fcfcfc" : "#303135";
+    const quoteBorder          = (!prefersDarkTheme && themeVariant === "light") ? "#e6e6e6" : "rgba(255,255,255,0.1)";
 
     // Brand colors
     // This is to make links to proprietary social media stand out.
@@ -52,23 +56,29 @@
 
     // Misc values
     // Is compact - false : true
-    const defaultSpacing   = !isCompact ? ".85rem" : ".45rem"; // Spacing between most elements
-    const defaultFontsize  = !isCompact ? "1rem" : "1rem";     // Default body font size
-    const mdFontsize       = !isCompact ? "14px" : "0.875rem"; // md-div aka comments and posts
+    const documentWidth    = !isCompact ? "100%" : "100%";        // Fill out the entire document
+    const mainContainer    = !isCompact ? "80%" : "80%";          // Main content
+    const sideContainer    = !isCompact ? "20%" : "20%";          // Sidebar
+    const defaultSpacing   = !isCompact ? ".85rem" : ".45rem";    // Spacing between most elements
+    const defaultFontsize  = !isCompact ? "1rem" : "1rem";        // Default body font size
+    const mdFontsize       = !isCompact ? "14px" : "0.875rem";    // md-div aka comments and posts
     const mdLineheight     = !isCompact ? "1.5" : "1.5";
-    const mdMaxwidth       = !isCompact ? "60em" : "60em";
+    const mdMaxwidth       = !isCompact ? "60em" : "60em";        // Comment max width
     const codeFontsize     = !isCompact ? "14px" : "0.875rem";
-    const titleFontsize    = !isCompact ? "medium" : "small";
+    const titleFontsize    = !isCompact ? "16px" : "small";
     const titleFontweight  = !isCompact ? "500" : "500";
     const subtitleFontsize = !isCompact ? "x-small" : "x-small";
-    const thumbWidth       = !isCompact ? "70px" : "50px";
+    const thumbWidth       = !isCompact ? "70px" : "50px";        // Image thumbnails
     const thumbHeight      = !isCompact ? "70px" : "50px";
-    const textThumbWidth   = !isCompact ? "50px" : "40px";
+    const textThumbWidth   = !isCompact ? "50px" : "40px";        // Round text link thumbnails
     const textThumbHeight  = !isCompact ? "50px" : "40px";
+    const commentSpacing   = !isCompact ? "8px" : "5px";          // Bottom margin between comments
 
     // Other stuff
-    const buttonRadius     = "4px";
     const defaultFonts     = "verdana,arial,helvetica,sans-serif"
+    const cardRadius       = "6px";                               // Border radius of every card, comment and colored content container
+    const quoteRadius      = "4px";                               // Blockquote radius
+    const buttonRadius     = "4px";
 
     const css = `
       /***********/
@@ -100,15 +110,15 @@
       /* SIZES */
       /*********/
       .home, .post, .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container, #navbar {
-        max-width: 100% !important;
+        max-width: ${documentWidth} !important;
       }
       .col-md-8 { /* Main content */
-        flex: 0 0 80% !important;
-        width: 80% !important;
+        flex: 0 0 ${mainContainer} !important;
+        width: ${mainContainer} !important;
       }
       .col-md-4 { /* Sidebar */
-        flex: 0 0 20% !important;
-        width: 20% !important;
+        flex: 0 0 ${sideContainer} !important;
+        width: ${sideContainer} !important;
         padding-left: 0 !important;
       }
       .vote-bar {
@@ -143,14 +153,20 @@
       /****************************/
       /* POST LISTINGS & COMMENTS */
       /****************************/
+      .post-listings, div > .comments > .comment {
+        border-radius: ${cardRadius} !important;
+      }
       .post-listings {
         box-shadow: ${cardShadow} !important;
+        padding: ${defaultSpacing} !important;
+      }
+      .post-listing > article {
         padding: ${defaultSpacing} !important;
       }
       div > ul.comments > .comment {
         box-shadow: ${cardShadow} !important;
         padding: 0 ${defaultSpacing} !important;
-        margin-bottom: 8px !important;
+        margin-bottom: ${commentSpacing} !important;
       }
       div > ul.comments > .comment > .comments .comment {
         margin-left: ${defaultSpacing} !important;
@@ -211,8 +227,9 @@
         border-radius: 100% !important;
       }
       .post-listings .post-metadata-card, .post-listings article#postContent {
-        border: 1px solid color-mix(in srgb, currentColor 6%, transparent) !important;
-        background-color: color-mix(in srgb, currentColor 4%, transparent) !important;
+        background-color: ${quoteBackground} !important;
+        border: 1px solid ${quoteBorder} !important;
+        border-radius: ${quoteRadius} !important;
         box-shadow: none !important;
       }
       /********/
@@ -235,10 +252,15 @@
         display: inline !important;
       }
       .md-div blockquote {
-        background-color: color-mix(in srgb, currentColor 4%, transparent) !important;
-        border: 1px solid color-mix(in srgb, currentColor 6%, transparent) !important;
-        border-radius: 4px !important;
+        background-color: ${quoteBackground} !important;
+        border: 1px solid ${quoteBorder} !important;
+        border-radius: ${quoteRadius} !important;
         padding: 8px !important;
+      }
+      .md-div pre {
+        background-color: ${codeBackground} !important;
+        border: 1px solid ${codeBorder} !important;
+        padding: 4px 9px !important;
       }
       .small a:hover,
       a.text-muted.btn:hover {
@@ -251,14 +273,14 @@
         max-width: unset !important;
       }
       .card-header:first-child {
-        border-radius: 0 !important;
+        border-radius: ${cardRadius} ${cardRadius} 0 0 !important;
       }
       .card {
         box-shadow: ${cardShadow} !important;
         border: none !important;
-        border-radius: 0 !important;
+        border-radius: ${cardRadius} !important;
       }
-      .card.border-secondary {
+      .card.border-secondary:not(.post-metadata-card) {
         border: none !important;
       }
       /* Let's make some social media links be their brand accent color */
