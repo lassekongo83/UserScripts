@@ -245,7 +245,6 @@
         color: color-mix(in srgb, currentColor 12%, transparent) !important;
         font-size: 4em !important;
         line-height: 0.1em !important;
-        margin-right: 0.1em !important;
         vertical-align: -0.4em !important;
       }
       .md-div blockquote p {
@@ -282,6 +281,12 @@
       }
       .card.border-secondary:not(.post-metadata-card) {
         border: none !important;
+      }
+      form.markdown-textarea textarea.form-control {
+        transition: min-height .3s;
+      }
+      form.markdown-textarea textarea.form-control:focus {
+        min-height: 400px;
       }
       /* Let's make some social media links be their brand accent color */
       a[href*="youtu.be"],
