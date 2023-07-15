@@ -2,7 +2,7 @@
 // @name        Frellwit's Lemmy Style
 // @namespace   https://github.com/lassekongo83/UserScripts/lemmy
 // @description A userstyle for Lemmy inspired by the old reddit design
-// @version     0.6
+// @version     0.7
 // @author      Frellwit on lemmy.world
 // @updateURL   https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
 // @downloadURL https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
@@ -300,10 +300,17 @@
         background-color: ${brandYouTube} !important;
         color: white !important;
       }
+      a[href*="facebook.com"] {
+        color: ${brandFacebook} !important;
+      }
       a[rel="noopener nofollow"][href*="facebook.com"] .thumbnail,
       a[rel="noopener nofollow"][href*="facebook.com"] .thumbnail:hover {
         background-color: ${brandFacebook} !important;
         color: white !important;
+      }
+      a[href*="/t.co/"],
+      a[href*="twitter.com"] {
+        color: ${brandTwitter} !important;
       }
       a[rel="noopener nofollow"][href*="/t.co"] .thumbnail,
       a[rel="noopener nofollow"][href*="/twitter.com"] .thumbnail,
@@ -311,6 +318,9 @@
       a[rel="noopener nofollow"][href*="/twitter.com"] .thumbnail:hover {
         background-color: ${brandTwitter} !important;
         color: white !important;
+      }
+      a[href*="twitch.tv"] {
+        color: ${brandTwitch} !important;
       }
       a[rel="noopener nofollow"][href*="twitch.tv"] .thumbnail,
       a[rel="noopener nofollow"][href*="twitch.tv"] .thumbnail:hover {
@@ -322,10 +332,16 @@
         background: ${brandInstagram} !important;
         color: white !important;
       }
+      a[href*="imgur.com"] {
+        color: ${brandImgur} !important;
+      }
       a[rel="noopener nofollow"][href*="imgur.com"] .thumbnail,
       a[rel="noopener nofollow"][href*="imgur.com"] .thumbnail:hover {
         background-color: ${brandImgur} !important;
         color: white !important;
+      }
+      a[href*="reddit.com"] {
+        color: ${brandReddit} !important;
       }
       a[rel="noopener nofollow"][href*="redd.it"] .thumbnail,
       a[rel="noopener nofollow"][href*="reddit.com"] .thumbnail,
