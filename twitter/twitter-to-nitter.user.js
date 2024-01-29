@@ -8,5 +8,4 @@
 // @grant             none
 // ==/UserScript==
 
-// nitter.net can also be replaced by https://farside.link/nitter to get a random working nitter instance
-window.location.replace("https://nitter.net" + window.location.pathname + window.location.search);
+window.location.replace("https://farside.link/nitter" + window.location.pathname + window.location.search);
