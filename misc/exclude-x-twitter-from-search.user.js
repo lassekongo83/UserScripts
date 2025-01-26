@@ -13,6 +13,7 @@
 
 (function() {
   const excludedSites = [
+    // Add more sites here, separated by a comma
     'x.com',
     'twitter.com'
   ];
