@@ -8,6 +8,8 @@
 // @match        https://duckduckgo.com/*
 // @match        https://www.bing.com/search*
 // @match        https://www.ecosia.org/search*
+// @updateURL    https://github.com/lassekongo83/UserScripts/raw/refs/heads/main/misc/exclude-x-twitter-from-search.user.js
+// @downloadURL  https://github.com/lassekongo83/UserScripts/raw/refs/heads/main/misc/exclude-x-twitter-from-search.user.js
 // @grant        none
 // ==/UserScript==
 
