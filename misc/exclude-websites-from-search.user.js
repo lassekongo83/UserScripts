@@ -1,23 +1,26 @@
 // ==UserScript==
-// @name         Exclude X/twitter from searches
+// @name         Exclude websites from search results
 // @namespace    Violentmonkey Scripts
 // @version      0.1
-// @description  Automatically exclude x.com and twitter.com from search results on various search engines
+// @description  Automatically excludes specified websites from search results on Google, Duckduckgo, Bing, Ecosia
 // @author       you
 // @match        https://www.google.*/search*
 // @match        https://duckduckgo.com/*
 // @match        https://www.bing.com/search*
 // @match        https://www.ecosia.org/search*
-// @updateURL    https://github.com/lassekongo83/UserScripts/raw/refs/heads/main/misc/exclude-x-twitter-from-search.user.js
-// @downloadURL  https://github.com/lassekongo83/UserScripts/raw/refs/heads/main/misc/exclude-x-twitter-from-search.user.js
 // @grant        none
 // ==/UserScript==
 
 (function() {
   const excludedSites = [
     // Add more sites here, separated by a comma
+    // For example:
     'x.com',
-    'twitter.com'
+    'twitter.com',
+    'facebook.com',
+    'quora.com',
+    'pinterest.com',
+    'instagram.com'
   ];
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
