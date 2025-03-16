@@ -2,7 +2,7 @@
 // @name        Frellwit's Lemmy Style
 // @namespace   https://github.com/lassekongo83/UserScripts/lemmy
 // @description A userstyle for Lemmy inspired by the old reddit design
-// @version     0.7
+// @version     0.8
 // @author      Frellwit on lemmy.world
 // @updateURL   https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
 // @downloadURL https://github.com/lassekongo83/UserScripts/raw/main/lemmy/frellwits-lemmy-style.user.js
@@ -19,7 +19,7 @@
   }
 
   if (isLemmy) {
-    const themeVariant = document.getElementById("app").getAttribute("data-bs-theme");
+    const themeVariant = document.documentElement.getAttribute("data-bs-theme");
     const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isCompact = document.head.querySelector('link[href*="-compact.css"]') !== null;
 
